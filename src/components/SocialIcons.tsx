@@ -10,49 +10,106 @@ import HoverLinks from "./HoverLinks";
 
 const SocialIcons = () => {
   useEffect(() => {
-    const social = document.getElementById("social") as HTMLElement;
+    const social = document.getElementById("social") as HTMLElement | null;
+    if (!social) return;
+
+    let rafId = 0;
+    let pageVisible = !document.hidden;
+
+    type ItemState = {
+      elem: HTMLElement;
+      link: HTMLElement;
+      rect: DOMRect;
+      mouseX: number;
+      mouseY: number;
+      currentX: number;
+      currentY: number;
+      hovered: boolean;
+      onMouseEnter: () => void;
+      onMouseLeave: () => void;
+      onMouseMove: (e: MouseEvent) => void;
+    };
+
+    const itemStates: ItemState[] = [];
 
     social.querySelectorAll("span").forEach((item) => {
       const elem = item as HTMLElement;
-      const link = elem.querySelector("a") as HTMLElement;
+      const link = elem.querySelector("a") as HTMLElement | null;
+      if (!link) return;
 
       const rect = elem.getBoundingClientRect();
-      let mouseX = rect.width / 2;
-      let mouseY = rect.height / 2;
-      let currentX = 0;
-      let currentY = 0;
 
-      const updatePosition = () => {
-        currentX += (mouseX - currentX) * 0.1;
-        currentY += (mouseY - currentY) * 0.1;
-
-        link.style.setProperty("--siLeft", `${currentX}px`);
-        link.style.setProperty("--siTop", `${currentY}px`);
-
-        requestAnimationFrame(updatePosition);
+      const state: ItemState = {
+        elem,
+        link,
+        rect,
+        mouseX: rect.width / 2,
+        mouseY: rect.height / 2,
+        currentX: rect.width / 2,
+        currentY: rect.height / 2,
+        hovered: false,
+        onMouseEnter: () => {
+          state.hovered = true;
+          state.rect = elem.getBoundingClientRect();
+        },
+        onMouseLeave: () => {
+          state.hovered = false;
+          state.mouseX = state.rect.width / 2;
+          state.mouseY = state.rect.height / 2;
+        },
+        onMouseMove: (e: MouseEvent) => {
+          if (!state.hovered) return;
+          const x = e.clientX - state.rect.left;
+          const y = e.clientY - state.rect.top;
+          state.mouseX = Math.max(0, Math.min(state.rect.width, x));
+          state.mouseY = Math.max(0, Math.min(state.rect.height, y));
+        },
       };
 
-      const onMouseMove = (e: MouseEvent) => {
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        if (x < 40 && x > 10 && y < 40 && y > 5) {
-          mouseX = x;
-          mouseY = y;
-        } else {
-          mouseX = rect.width / 2;
-          mouseY = rect.height / 2;
-        }
-      };
-
-      document.addEventListener("mousemove", onMouseMove);
-
-      updatePosition();
-
-      return () => {
-        elem.removeEventListener("mousemove", onMouseMove);
-      };
+      elem.addEventListener("mouseenter", state.onMouseEnter);
+      elem.addEventListener("mouseleave", state.onMouseLeave);
+      elem.addEventListener("mousemove", state.onMouseMove);
+      itemStates.push(state);
     });
+
+    const onResize = () => {
+      itemStates.forEach((state) => {
+        state.rect = state.elem.getBoundingClientRect();
+      });
+    };
+
+    const onVisibilityChange = () => {
+      pageVisible = !document.hidden;
+    };
+
+    const animate = () => {
+      if (pageVisible) {
+        itemStates.forEach((state) => {
+          state.currentX += (state.mouseX - state.currentX) * 0.15;
+          state.currentY += (state.mouseY - state.currentY) * 0.15;
+
+          state.link.style.setProperty("--siLeft", `${state.currentX}px`);
+          state.link.style.setProperty("--siTop", `${state.currentY}px`);
+        });
+      }
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("resize", onResize);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    rafId = requestAnimationFrame(animate);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+      itemStates.forEach((state) => {
+        state.elem.removeEventListener("mouseenter", state.onMouseEnter);
+        state.elem.removeEventListener("mouseleave", state.onMouseLeave);
+        state.elem.removeEventListener("mousemove", state.onMouseMove);
+      });
+    };
   }, []);
 
   return (

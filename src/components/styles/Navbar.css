@@ -1,9 +1,11 @@
+/* ── Header bar ─────────────────────────────────────────────────── */
 .header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   max-width: var(--cMaxWidth);
   width: var(--cWidth);
-  justify-content: space-between;
-  padding: 20px 0px;
+  padding: 20px 0;
   margin-bottom: -100px;
   box-sizing: border-box;
   position: fixed;
@@ -12,71 +14,170 @@
   top: 0;
   z-index: 9999;
 }
-.header ul {
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
+
+/* ── Logo ───────────────────────────────────────────────────────── */
+.navbar-title {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  flex-shrink: 0;
+}
+
+/* ── Centre LinkedIn link (desktop only) ────────────────────────── */
+.navbar-connect {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 15px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  display: none;
+  white-space: nowrap;
+}
+
+/* ── Desktop nav links ──────────────────────────────────────────── */
+.navbar-links {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 40px;
   margin: 0;
   padding: 0;
   list-style: none;
-  column-gap: 40px;
-  row-gap: 8px;
-  align-items: flex-end;
+  font-size: 12px;
 }
-.header ul li {
-  margin-left: 0px;
+
+.navbar-links li {
   letter-spacing: 1px;
   color: #ccc;
   font-weight: 600;
   cursor: pointer;
 }
-.navbar-connect {
-  position: absolute;
-  display: none;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 15px;
-  letter-spacing: 1px;
-  font-weight: 500;
+
+/* ── Hamburger button (mobile only) ─────────────────────────────── */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
 }
-.navbar-title {
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: 0.2px;
+
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: #eae5ec;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform-origin: center;
 }
+
+.hamburger--open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger--open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger--open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ── Mobile dropdown menu ────────────────────────────────────────── */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(5, 8, 16, 0.97);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 9998;
+  padding: 90px 0 40px;
+  transform: translateY(-100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.mobile-menu--open {
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.mobile-menu ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.mobile-menu ul li {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #eae5ec;
+  cursor: pointer;
+}
+
+/* ── 500px – show desktop nav, hide hamburger ───────────────────── */
 @media only screen and (min-width: 500px) {
   .header {
-    padding: 20px 0px;
+    padding: 20px 0;
   }
-  .header ul {
-    flex-direction: row;
-    align-items: center;
+
+  .navbar-links {
+    display: flex;
     font-size: 14px;
   }
-  .header ul li {
+
+  .navbar-links li {
     color: #eae5ec;
   }
+
+  .hamburger {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
+
   .navbar-title {
     font-size: 16px;
   }
 }
+
+/* ── 900px – show centre LinkedIn link ──────────────────────────── */
 @media only screen and (min-width: 900px) {
   .navbar-connect {
     display: block;
   }
 }
+
+/* ── 1200px – larger spacing ────────────────────────────────────── */
 @media only screen and (min-width: 1200px) {
   .header {
-    padding: 35px 0px;
+    padding: 35px 0;
   }
-  .header ul {
-    column-gap: 80px;
+
+  .navbar-links {
+    gap: 80px;
     font-size: 16px;
   }
+
   .navbar-connect {
     font-size: 16px;
   }
+
   .navbar-title {
     font-size: 18px;
   }
