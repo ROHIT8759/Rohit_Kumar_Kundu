@@ -7,21 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum AnalyticsAction {
-  START
-  HEARTBEAT
-  END
-}
-
 model VisitorAnalytics {
-  id                  String   @id @default(cuid())
-  visitId             String   @db.VarChar(128)
-  action              AnalyticsAction
+  id                  String          @id @default(cuid())
+  visitId             String          @db.VarChar(128)
   path                String
   url                 String
   referrer            String?
   userAgent           String?
-  ipAddress           String?  @db.VarChar(128)
+  ipAddress           String?         @db.VarChar(128)
   forwardedFor        String?
   city                String?
   region              String?
@@ -52,10 +45,11 @@ model VisitorAnalytics {
   durationMs          Int?
   startedAt           DateTime?
   endedAt             DateTime?
-  eventAt             DateTime @default(now())
   metadata            Json?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  action              AnalyticsAction
+  eventAt             DateTime        @default(now())
 
   @@index([eventAt(sort: Desc)])
   @@index([visitId, eventAt(sort: Desc)])
@@ -63,4 +57,10 @@ model VisitorAnalytics {
   @@index([ipAddress])
   @@index([path])
   @@index([country, eventAt(sort: Desc)])
+}
+
+enum AnalyticsAction {
+  START
+  HEARTBEAT
+  END
 }
