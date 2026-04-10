@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AnalyticsAction {
+  START
+  HEARTBEAT
+  END
+}
+
+model VisitorAnalytics {
+  id                  String   @id @default(cuid())
+  visitId             String   @db.VarChar(128)
+  action              AnalyticsAction
+  path                String
+  url                 String
+  referrer            String?
+  userAgent           String?
+  ipAddress           String?  @db.VarChar(128)
+  forwardedFor        String?
+  city                String?
+  region              String?
+  country             String?
+  latitude            Float?
+  longitude           Float?
+  timezone            String?
+  timezoneOffset      Int?
+  language            String?
+  languages           Json?
+  platform            String?
+  deviceMemoryGb      Float?
+  hardwareConcurrency Int?
+  screenWidth         Int?
+  screenHeight        Int?
+  viewportWidth       Int?
+  viewportHeight      Int?
+  colorDepth          Int?
+  pixelRatio          Float?
+  touchPoints         Int?
+  cookieEnabled       Boolean?
+  doNotTrack          String?
+  online              Boolean?
+  connectionType      String?
+  effectiveType       String?
+  downlinkMbps        Float?
+  rttMs               Int?
+  durationMs          Int?
+  startedAt           DateTime?
+  endedAt             DateTime?
+  eventAt             DateTime @default(now())
+  metadata            Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([eventAt(sort: Desc)])
+  @@index([visitId, eventAt(sort: Desc)])
+  @@index([action, eventAt(sort: Desc)])
+  @@index([ipAddress])
+  @@index([path])
+  @@index([country, eventAt(sort: Desc)])
+}
