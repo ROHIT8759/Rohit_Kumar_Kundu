@@ -67,6 +67,29 @@ const getGeoFromHeaders = (req: NextApiRequest) => ({
   city: getHeaderValue(req.headers["x-vercel-ip-city"]),
 });
 
+type IpGeo = {
+  country?: string;
+  region?: string;
+  city?: string;
+};
+
+const getGeoFromIp = async (ip: string | undefined): Promise<IpGeo> => {
+  if (!ip || ip === "::1" || ip === "127.0.0.1" || ip.startsWith("192.168.") || ip.startsWith("10.")) {
+    return {};
+  }
+  try {
+    const res = await fetch(`http://ip-api.com/json/${ip}?fields=country,regionName,city,status`, {
+      signal: AbortSignal.timeout(1500),
+    });
+    if (!res.ok) return {};
+    const data = await res.json() as { status: string; country?: string; regionName?: string; city?: string };
+    if (data.status !== "success") return {};
+    return { country: data.country, region: data.regionName, city: data.city };
+  } catch {
+    return {};
+  }
+};
+
 const sanitizeNumber = (value: unknown): number | undefined => {
   if (typeof value !== "number" || Number.isNaN(value) || !Number.isFinite(value)) {
     return undefined;
@@ -94,7 +117,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     const { ipAddress, forwardedFor } = getIpAddress(req);
-    const geo = getGeoFromHeaders(req);
+    const headerGeo = getGeoFromHeaders(req);
+    const geo = (headerGeo.country)
+      ? headerGeo
+      : await getGeoFromIp(ipAddress);
     const now = new Date();
     const action = payload.action;
 
