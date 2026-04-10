@@ -10,7 +10,7 @@ const Contact = () => {
             <h4>Connect</h4>
             <p>
               <a
-                href="https://www.linkedin.com/in/rohit-kumar-kundu"
+                href="https://www.linkedin.com/in/rohit-kumar-kundu/"
                 target="_blank"
                 rel="noreferrer"
                 data-cursor="disable"
@@ -32,7 +32,7 @@ const Contact = () => {
           <div className="contact-box">
             <h4>Social</h4>
             <a
-              href="https://github.com/LK011R750"
+              href="https://github.com/ROHIT8759"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -41,7 +41,7 @@ const Contact = () => {
               GitHub <MdArrowOutward />
             </a>
             <a
-              href="https://www.linkedin.com/in/rohit-kumar-kundu"
+              href="https://www.linkedin.com/in/rohit-kumar-kundu/"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
@@ -50,13 +50,22 @@ const Contact = () => {
               LinkedIn <MdArrowOutward />
             </a>
             <a
-              href="https://github.com/LK011R750"
+              href="https://x.com/ROHIT_Kr_KUNDU"
               target="_blank"
               rel="noreferrer"
               data-cursor="disable"
               className="contact-social"
             >
-              GitHub Projects <MdArrowOutward />
+              X (Twitter) <MdArrowOutward />
+            </a>
+            <a
+              href="https://www.instagram.com/rohit_kumar_kundu/"
+              target="_blank"
+              rel="noreferrer"
+              data-cursor="disable"
+              className="contact-social"
+            >
+              Instagram <MdArrowOutward />
             </a>
             <a
               href="tel:+917908655084"
