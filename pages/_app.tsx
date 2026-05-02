@@ -1,5 +1,6 @@
 import type { AppProps } from "next/app";
 import AnalyticsTracker from "../src/components/AnalyticsTracker";
+import WebMcpTools from "../src/components/WebMcpTools";
 
 import "../src/index.css";
 import "../src/App.css";
@@ -19,6 +20,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <AnalyticsTracker />
+      <WebMcpTools />
       <Component {...pageProps} />
     </>
   );
