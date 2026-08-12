@@ -2,6 +2,7 @@ import dynamic from "next/dynamic";
 import { Suspense, useState, useEffect } from "react";
 import MainContainer from "./components/MainContainer";
 import { LoadingProvider } from "./context/LoadingProvider";
+import { initialFX } from "./components/utils/initialFX";
 
 const CharacterFallback = () => (
   <div
@@ -39,6 +40,11 @@ const App = () => {
   const [load3D, setLoad3D] = useState(false);
 
   useEffect(() => {
+    // Run the GSAP intro animations and re-enable scrolling
+    setTimeout(() => {
+      initialFX();
+    }, 100);
+
     // Delay loading the heavy 3D model until after hydration and critical rendering.
     // Gives the browser time to paint the HTML/CSS first.
     const timer = setTimeout(() => {
