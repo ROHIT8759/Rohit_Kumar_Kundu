@@ -1,8 +1,4 @@
-import dynamic from "next/dynamic";
-
-const App = dynamic(() => import("../src/App"), {
-  ssr: false,
-});
+import App from "../src/App";
 
 export default function HomePage() {
   return <App />;
