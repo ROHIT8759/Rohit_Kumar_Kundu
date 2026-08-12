@@ -48,7 +48,7 @@ export default function WebMcpTools() {
           required: ["sectionId"],
           additionalProperties: false,
         },
-        execute: async (input) => {
+        execute: async (input: any) => {
           const sectionId = input.sectionId as SectionId;
           return scrollToSection(sectionId);
         },
