@@ -77,5 +77,5 @@ export default async function setSplitText() {
     );
   });
 
-  ScrollTrigger.addEventListener("refresh", () => setSplitText());
+  ScrollTrigger.addEventListener("refresh", () => { setSplitText(); });
 }
