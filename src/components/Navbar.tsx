@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import HoverLinks from "./HoverLinks";
-let smoother: any;
+export let smoother: any;
 
 const NAV_LINKS = [
   { label: "ABOUT", href: "#about" },
