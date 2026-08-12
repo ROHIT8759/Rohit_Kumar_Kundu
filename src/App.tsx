@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import MainContainer from "./components/MainContainer";
 import { LoadingProvider } from "./context/LoadingProvider";
 
@@ -36,12 +36,23 @@ const FullPageFallback = () => (
 );
 
 const App = () => {
+  const [load3D, setLoad3D] = useState(false);
+
+  useEffect(() => {
+    // Delay loading the heavy 3D model until after hydration and critical rendering.
+    // Gives the browser time to paint the HTML/CSS first.
+    const timer = setTimeout(() => {
+      setLoad3D(true);
+    }, 1500); // 1.5s delay
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <LoadingProvider>
-        <Suspense fallback={<FullPageFallback />}>
+        <Suspense fallback={<CharacterFallback />}>
           <MainContainer>
-            <CharacterModel />
+            {load3D ? <CharacterModel /> : <CharacterFallback />}
           </MainContainer>
         </Suspense>
       </LoadingProvider>

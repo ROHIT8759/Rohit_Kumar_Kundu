@@ -1,18 +1,19 @@
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-import { SplitText } from "gsap/SplitText";
-
 interface ParaElement extends HTMLElement {
-  anim?: gsap.core.Animation;
-  split?: SplitText;
+  anim?: any;
+  split?: any;
 }
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
-
-export default function setSplitText() {
-  ScrollTrigger.config({ ignoreMobileResize: true });
+export default async function setSplitText() {
   if (window.innerWidth < 900) return;
+  
+  const { gsap } = await import("gsap");
+  const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+  const { ScrollSmoother } = await import("gsap/ScrollSmoother");
+  const { SplitText } = await import("gsap/SplitText");
+
+  gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+  ScrollTrigger.config({ ignoreMobileResize: true });
+
   const paras: NodeListOf<ParaElement> = document.querySelectorAll(".para");
   const titles: NodeListOf<ParaElement> = document.querySelectorAll(".title");
 

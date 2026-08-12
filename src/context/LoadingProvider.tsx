@@ -28,7 +28,8 @@ export const LoadingProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <LoadingContext.Provider value={value as LoadingType}>
-      {isLoading && <Loading percent={loading} />}
+      {/* Remove global blocking loading screen to ensure Zero-JS-First-View. We keep Provider for context, but do not block children. */}
+      {/* {isLoading && <Loading percent={loading} />} */}
       <main className="main-body">{children}</main>
     </LoadingContext.Provider>
   );

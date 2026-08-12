@@ -1,12 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
-import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap/ScrollSmoother";
-
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+let smoother: any;
 
 const NAV_LINKS = [
   { label: "ABOUT", href: "#about" },
@@ -19,18 +14,28 @@ const Navbar = () => {
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
+    const initGsap = async () => {
+      const { gsap } = await import("gsap");
+      const { ScrollSmoother } = await import("gsap/ScrollSmoother");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+      
+      gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
+      
+      smoother = ScrollSmoother.create({
+        wrapper: "#smooth-wrapper",
+        content: "#smooth-content",
+        smooth: 1.7,
+        speed: 1.7,
+        effects: true,
+        autoResize: true,
+        ignoreMobileResize: true,
+      });
 
-    smoother.scrollTop(0);
-    smoother.paused(true);
+      smoother.scrollTop(0);
+      smoother.paused(true);
+    };
+
+    initGsap();
 
     const links = document.querySelectorAll(".header ul a");
     links.forEach((elem) => {
@@ -46,7 +51,12 @@ const Navbar = () => {
       });
     });
 
-    const handleResize = () => ScrollSmoother.refresh(true);
+    const handleResize = async () => {
+      if (smoother) {
+        const { ScrollSmoother } = await import("gsap/ScrollSmoother");
+        ScrollSmoother.refresh(true);
+      }
+    };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
