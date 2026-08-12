@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../src/lib/prisma";
+import { createClient } from "@supabase/supabase-js";
+import { randomUUID } from "crypto";
 
 type AnalyticsAction = "start" | "heartbeat" | "end";
 
@@ -163,16 +164,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     };
 
-    await prisma.visitorAnalytics.create({
-      data: {
-        visitId: payload.visitId,
-        action: prismaActionMap[action],
-        eventAt: now,
-        startedAt: action === "start" ? now : undefined,
-        endedAt: action === "end" ? now : undefined,
-        ...commonData,
-      },
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      supabaseKey
+    );
+
+    const { error } = await supabase.from("VisitorAnalytics").insert({
+      id: randomUUID(),
+      visitId: payload.visitId,
+      action: prismaActionMap[action],
+      eventAt: now.toISOString(),
+      startedAt: action === "start" ? now.toISOString() : null,
+      endedAt: action === "end" ? now.toISOString() : null,
+      updatedAt: now.toISOString(),
+      ...commonData,
     });
+
+    if (error) {
+      console.error("Supabase insert error:", error);
+      return res.status(500).json({ error: "Failed to store analytics" });
+    }
 
     return res.status(200).json({ ok: true, action });
   } catch (error) {
