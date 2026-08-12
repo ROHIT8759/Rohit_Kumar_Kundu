@@ -13,8 +13,8 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Founder &amp; COO</h4>
-                <h5>Oxly Labs</h5>
+                <h4>Backend Developer</h4>
+                <h5>Lumeo</h5>
               </div>
               <h3>2026–Now</h3>
             </div>
@@ -26,7 +26,7 @@ const Career = () => {
           <div className="career-info-box">
             <div className="career-info-in">
               <div className="career-role">
-                <h4>Co-Founder</h4>
+                <h4>Backend Developer &amp; Project Development Manager</h4>
                 <h5>LNC COMMUNITY</h5>
               </div>
               <h3>2024–Now</h3>
