@@ -8,34 +8,43 @@ const projects = [
     category: "Smart Admin Dashboard",
     tools: "MERN Stack, Real-time Monitoring, Secure Controls",
     image: "/images/orrdr.png",
-    link: "https://github.com/LK011R750",
+    link: "https://github.com/LNC-Network/lnc-adminPanel",
   },
   {
     title: "Yield Shop",
     category: "AI-powered E-commerce",
     tools: "React, AI Suggestions, Smart Cart, Recommendations",
-    image: "/images/whatsapp.png",
-    link: "https://github.com/LK011R750",
+    image: "/images/yieldshop.png",
+    link: "https://github.com/ROHIT8759/Yield_Shop",
   },
   {
     title: "Next.js Development Boilerplate",
     category: "Full-stack Starter Project",
     tools: "Next.js, TypeScript, API Routes, Scalable Architecture",
     image: "/images/broki.png",
-    link: "https://github.com/LK011R750",
+    link: "https://github.com/ROHIT8759/rkk-next",
   },
   {
-    title: "Web3 Exploration",
-    category: "Decentralized App Learning Track",
-    tools: "Solidity, Smart Contracts, Wallet Integration, Rust Basics",
-    image: "/images/callhq.png",
-    link: "https://github.com/LK011R750",
+    title: "Ermiz Studio",
+    category: "Visual Backend Design Platform",
+    tools: "Next.js 16, React 19, TS, XYFlow, Prisma, Supabase",
+    image: "/images/ermiz_studio.png",
+    link: "https://github.com/ROHIT8759/Ermiz_Studio",
+  },
+  {
+    title: "Block Builder",
+    category: "DApp Frontend Generator",
+    tools: "Next.js 15, TypeScript, Tailwind CSS, ethers.js, Supabase",
+    image: "/images/Bulder page.png",
+    link: "https://github.com/ROHIT8759/Low_-_No_Code_Platform_on_CELO",
   },
 ];
 
 const Work = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   const goToSlide = useCallback(
     (index: number) => {
@@ -58,6 +67,31 @@ const Work = () => {
       currentIndex === projects.length - 1 ? 0 : currentIndex + 1;
     goToSlide(newIndex);
   }, [currentIndex, goToSlide]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      goToNext();
+    }
+    if (isRightSwipe) {
+      goToPrev();
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   return (
     <div className="work-section" id="work">
@@ -86,7 +120,12 @@ const Work = () => {
           </button>
 
           {/* Slides */}
-          <div className="carousel-track-container">
+          <div 
+            className="carousel-track-container"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             <div
               className="carousel-track"
               style={{
