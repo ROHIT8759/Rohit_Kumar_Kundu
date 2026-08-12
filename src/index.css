@@ -1,7 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap");
-
 :root {
-  font-family: "Geist", sans-serif;
+  font-family: var(--font-geist), sans-serif;
 
   font-optical-sizing: auto;
   font-style: normal;
@@ -30,7 +28,31 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Geist", sans-serif;
+  font-family: var(--font-geist), sans-serif;
+}
+
+.desktop-character-wrapper {
+  display: block;
+}
+
+.mobile-character-wrapper {
+  display: none;
+}
+
+.desktop-techstack-wrapper {
+  display: block;
+}
+
+@media screen and (max-width: 1024px) {
+  .desktop-character-wrapper {
+    display: none;
+  }
+  .mobile-character-wrapper {
+    display: block;
+  }
+  .desktop-techstack-wrapper {
+    display: none;
+  }
 }
 
 body {

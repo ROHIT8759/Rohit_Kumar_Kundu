@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function ApiDocsPage() {
   return (
     <main style={{ maxWidth: 760, margin: "0 auto", padding: "48px 24px" }}>
@@ -23,9 +25,11 @@ export default function ApiDocsPage() {
         <h2>Resources</h2>
         <ul>
           <li>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/openapi.json">OpenAPI specification</a>
           </li>
           <li>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/.well-known/api-catalog">API catalog</a>
           </li>
         </ul>
