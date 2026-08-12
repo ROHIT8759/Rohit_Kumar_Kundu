@@ -21,6 +21,11 @@ const Navbar = () => {
       
       gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
       
+      if (smoother) {
+        smoother.kill();
+      }
+
+      
       smoother = ScrollSmoother.create({
         wrapper: "#smooth-wrapper",
         content: "#smooth-content",
@@ -32,7 +37,6 @@ const Navbar = () => {
       });
 
       smoother.scrollTop(0);
-      smoother.paused(true);
     };
 
     initGsap();
@@ -58,7 +62,10 @@ const Navbar = () => {
       }
     };
     window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (smoother) smoother.kill();
+    };
   }, []);
 
   // Close menu on outside click
